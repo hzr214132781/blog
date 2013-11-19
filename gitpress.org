@@ -9,7 +9,7 @@
         },
         "title"  : "Norfish's Blog",
         "comment"  : "on",
-        "domain-alias"  : ["jspie.me"],
+        "domain-alias"  : ["blog.norfish.com"],
         "friends"  : [
                 {
                         "name"  : "JerryQu的小站",
