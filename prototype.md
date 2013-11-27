@@ -45,17 +45,18 @@ JavaScript的面向对象来源于‘self’这个牛逼但短命的编程语言
 
 ### 如何生成对象?
 
-- 1.声明对象直接量:JSON
-```
-    var obj = {
-        name: "jack",
-        eat: "bread"
-    }
-    console.log(typeof obj);
-```
+-1.声明对象直接量:JSON  
 
-- 2.使用构造函数生成一个新的对象
-```
+
+        var obj = {
+            name: "jack",
+            eat: "bread"
+        }
+        console.log(typeof obj);
+
+
+-2.使用构造函数生成一个新的对象
+
     //构造函数
     var Foo = function(name){
         this.name = name;  //私有属性    
@@ -70,51 +71,47 @@ JavaScript的面向对象来源于‘self’这个牛逼但短命的编程语言
     console.log(typeof kick);
     console.log(kick.name);
     kick.run();
-```
 
-- 3.使用使用Object.create创建对象
+
+-3.使用使用Object.create创建对象
 ECMAScript 5中引入了一个新方法: Object.create. 可以调用这个方法来创建一个新对象. 新对象的原型就是调用create方法时传入的第一个参数:
 >先来看一下create方法是如何实现的,该方法来源于Douglas Crockford,现在已被ECMAScript 5引入:
-```
+
     Object.create = function (parent) {
         function F() {}
         F.prototype = parent;
         return new F();
     };
-```
+
 这个看起来很简洁,而且能够完全代替new的用法,毕竟new关键字并不真正的属于JavaScrip的原型模式.它先是声明了一个构造器,然后将其原型设置为你想要的值,最后返回生成的新对象.其实就是封装了new.
 
 下面这段代码就是真正的原型继承了.look:
-```
+
     var Point = {
         x: 0,
         y: 0,
         print: function () { console.log(this.x, this.y); }
     };
-
     var p = Object.create(Point);  //new一个对象
     p.x = 10;
     p.y = 20;
     p.print(); // 10 20
-```
+
 
 code:
-```
-function Plant(name,year){
-    this.name = name;
-    this.year = year || 0;
-}
 
-var tree.prototype = new Plant('tree');
+    function Plant(name,year){
+        this.name = name;
+        this.year = year || 0;
+    }
+    var tree.prototype = new Plant('tree');
+    tree.prototype.grow = function(){
+        this.year ++;
+    }
+    tree.prototype.old = functiono(){
+        console.log(this.year);
+    }
 
-tree.prototype.grow = function(){
-    this.year ++;
-}
-
-tree.prototype.old = functiono(){
-    console.log(this.year);
-}
-```
 上面这段代码使用原型实现了一个简单的对象继承.下面来分析下上面这段代码
 首先是声明了一个构造函数,构造函数和普通函数有什么区别?构造函数可以使用new调用,生成一个新的对象.
 如果想要在对象上添加方法,可以将方法写在对象的原型上.
@@ -135,39 +132,37 @@ JavaScrip可以采用构造器(constructor)生成一个新的对象,每个构造
 **注:** __proto__ 是一个不应在你代码中出现的非正规的用法，这里仅仅用它来解释JavaScript原型继承的工作原理。
 
 知道了JavaScrip原型链的存在之后,让我们来看下它的实现,下面这段代码展示了原型链是如何工作的.
-```
-function getProperty(obj, prop) {
-    if (obj.hasOwnProperty(prop)) //首先查找自身属性,如果有则直接返回
-        return obj[prop]
 
-    else if (obj.__proto__ !== null)
-        return getProperty(obj.__proto__, prop) //如何不是私有属性,就在原型链上一步步向上查找,直到找到,如果找不到就返回undefind
+    function getProperty(obj, prop) {
+        if (obj.hasOwnProperty(prop)) //首先查找自身属性,如果有则直接返回
+            return obj[prop]
+        else if (obj.__proto__ !== null)
+            return getProperty(obj.__proto__, prop) //如何不是私有属性,就在原型链上一步步向上查找,直到找到,如果找不到就返回undefind
+        else
+            return undefined
+    }
 
-    else
-        return undefined
-}
-```
 
 So,如果__proto__可以使用的话,我们可以通过下面这种方式实现继承:
-```
+
+
         var person = {
             city: "Beijing",
             hate: function(){
                 alert("I really hate the PM2.5 and the foggy wether!");
             }
         }
-
         var lee = {
             name: "lee",
             age: "18",
             __proto__: person
         }
-
         console.log(lee);
         lee.hate();
-```
-这都什么玩意儿,不是要用new吗.事实上,事情不是这么简单滴,为了和主流的类继承扯上那么一点儿关系,JavaScrip引入了'new'关键字,引入了构造函数.所以通常我们看到的是下面这样的:
-```
+
+
+这都什么玩意儿,不是要用new吗.事实上,事情不是这么简单滴,  为了和主流的类继承扯上那么一点儿关系,JavaScrip引入了'new'关键字,引入了构造函数.所以通常我们看到的是下面这样的:
+
         var Person = function(name,age){
             this.name = name;
             this.age  = age;
@@ -181,78 +176,67 @@ So,如果__proto__可以使用的话,我们可以通过下面这种方式实现�
         var lee = new Person('lee',18);
         console.log(lee.name);
         lee.hate();
-```
+
 我们需要一个像类一样的东西,于是有了构造函数,我们得有一个通过类生成实例的过程,于是又出现了new.这么一来JavaScrip的原型继承似乎就变得不伦不类了.虽然JavaScrip的原型继承来源于'self',但是却追随了类继承的形式.罪过,不过话说回来,也许就是因为这种妥协才让JavaScrip能够流行起来,并成为了现在最流行的原型继承语言,而self,说实话,它独特写法确实挺难让人接受的.
 
 
-```
+
         var Foo = function(){
             this.name = "foo";
         }
-
         Foo.prototype.say = function(){
             alert("Hello World!");
         }
-
         var foo = new Foo();
-
         console.log(foo.__proto__); //私有链接,指向构造函数的原型
         console.log(Foo.prototype);  
         console.log(foo.__proto__ === Foo.prototype); //true
         console.log(foo.__proto__.constructor === Foo); //true
-```
 
-```              
- // 声明 Animal 对象构造器
- function Animal(name) { 
-    this.name = name;
- } 
 
- // 将 Animal 的 prototype 属性指向一个对象，
- // 亦可直接理解为指定 Animal 对象的原型
- Animal.prototype = {
-    weight: 0, 
-    eat: function() { 
-        alert( "Animal is eating!" ); 
-    } 
- }
+              
+     // 声明 Animal 对象构造器
+     function Animal(name) { 
+        this.name = name;
+     } 
+     // 将 Animal 的 prototype 属性指向一个对象，
+     // 亦可直接理解为指定 Animal 对象的原型
+     Animal.prototype = {
+        weight: 0, 
+        eat: function() { 
+            alert( "Animal is eating!" ); 
+        } 
+     }
+     // 声明 Mammal 对象构造器
+     function Mammal() { 
+        this.name = "mammal"; 
+     } 
+     // 指定 Mammal 对象的原型为一个 Animal 对象。
+     // 实际上此处便是在创建 Mammal 对象和 Animal 对象之间的原型链
+     Mammal.prototype = new Animal("animal"); 
+     // 声明 Horse 对象构造器
+     function Horse( height, weight ) { 
+        this.name = "horse"; 
+        this.height = height; 
+        this.weight = weight; 
+     }
+     // 将 Horse 对象的原型指定为一个 Mamal 对象，继续构建 Horse 与 Mammal 之间的原型链
+     Horse.prototype = new Mammal(); 
+     // 重新指定 eat 方法 , 此方法将覆盖从 Animal 原型继承过来的 eat 方法
+     Horse.prototype.eat = function() { 
+        alert( "Horse is eating grass!" ); 
+     }
+     // 验证并理解原型链
+     var horse = new Horse( 100, 300 ); 
+     console.log( horse.__proto__ === Horse.prototype ); 
+     console.log( Horse.prototype.__proto__ === Mammal.prototype ); 
+     console.log( Mammal.prototype.__proto__ === Animal.prototype ); 
+     //原型链
+     Horse-->Mammal的实例
+     Mammal-->Animal的实例
+     Animal -->Object.prototype
 
- // 声明 Mammal 对象构造器
- function Mammal() { 
-    this.name = "mammal"; 
- } 
 
- // 指定 Mammal 对象的原型为一个 Animal 对象。
- // 实际上此处便是在创建 Mammal 对象和 Animal 对象之间的原型链
- Mammal.prototype = new Animal("animal"); 
-
- // 声明 Horse 对象构造器
- function Horse( height, weight ) { 
-    this.name = "horse"; 
-    this.height = height; 
-    this.weight = weight; 
- }
-
- // 将 Horse 对象的原型指定为一个 Mamal 对象，继续构建 Horse 与 Mammal 之间的原型链
- Horse.prototype = new Mammal(); 
-
- // 重新指定 eat 方法 , 此方法将覆盖从 Animal 原型继承过来的 eat 方法
- Horse.prototype.eat = function() { 
-    alert( "Horse is eating grass!" ); 
- }
-
- // 验证并理解原型链
- var horse = new Horse( 100, 300 ); 
- console.log( horse.__proto__ === Horse.prototype ); 
- console.log( Horse.prototype.__proto__ === Mammal.prototype ); 
- console.log( Mammal.prototype.__proto__ === Animal.prototype ); 
-
- //原型链
- Horse-->Mammal的实例
- Mammal-->Animal的实例
- Animal -->Object.prototype
-
-```
 
 在 ECMAScript 中，每个由构造器创建的对象拥有一个指向构造器 prototype 属性值的 隐式引用（implicit reference），这个引用称之为 原型（prototype）。进一步，每个原型可以拥有指向自己原型的 隐式引用（即该原型的原型），如此下去，这就是所谓的 原型链（prototype chain） [参考资源](http://bclary.com/2004/11/07/#a-4.3.5)。在具体的语言实现中，每个对象都有一个 __proto__ 属性来实现对原型的 隐式引用。
 
