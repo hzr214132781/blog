@@ -41,11 +41,62 @@ JavaScript的面向对象来源于‘self’这个牛逼但短命的编程语言
 
 ##那么,JavaScript中是如何实现的基于原型的面向对象?
 
-JavaScrip中的继承方式是原型继承,下面通过代码来探寻JavaScrip原型继承的实现方式.
+要理解原型继承,首先得先熟悉几个概念,咱们一步步说起:
+
 ### 如何生成对象?
 
 - 1.声明对象直接量:JSON
+```
+    var obj = {
+        name: "jack",
+        eat: "bread"
+    }
+    console.log(typeof obj);
+```
+
 - 2.使用构造函数生成一个新的对象
+```
+    //构造函数
+    var Foo = function(name){
+        this.name = name;  //私有属性    
+    }
+    
+    //原型方法和属性,被继承时候才会调用
+    Foo.prototype.run = function(){
+        alert("I'm running so fast that can't stop at all!");
+    }
+    
+    var kick = new Foo("kick");
+    console.log(typeof kick);
+    console.log(kick.name);
+    kick.run();
+```
+
+- 3.使用使用Object.create创建对象
+ECMAScript 5中引入了一个新方法: Object.create. 可以调用这个方法来创建一个新对象. 新对象的原型就是调用create方法时传入的第一个参数:
+>先来看一下create方法是如何实现的,该方法来源于Douglas Crockford,现在已被ECMAScript 5引入:
+```
+    Object.create = function (parent) {
+        function F() {}
+        F.prototype = parent;
+        return new F();
+    };
+```
+这个看起来很简洁,而且能够完全代替new的用法,毕竟new关键字并不真正的属于JavaScrip的原型模式.它先是声明了一个构造器,然后将其原型设置为你想要的值,最后返回生成的新对象.其实就是封装了new.
+
+下面这段代码就是真正的原型继承了.look:
+```
+    var Point = {
+        x: 0,
+        y: 0,
+        print: function () { console.log(this.x, this.y); }
+    };
+
+    var p = Object.create(Point);  //new一个对象
+    p.x = 10;
+    p.y = 20;
+    p.print(); // 10 20
+```
 
 code:
 ```
@@ -74,10 +125,65 @@ tree.prototype.old = functiono(){
 **下面这段是ECMAScript关于原型的解释**
 
 >ECMAScript does not contain proper classes such as those in C++, Smalltalk, or Java, but rather, supports constructors which create objects by executing code that allocates storage for the objects and initialises all or part of them by assigning initial values to their properties. All constructors are objects, but not all objects are constructors. Each constructor has a Prototype property that is used to implement prototype-based inheritance and shared properties. Objects are created by using constructors in new expressions; for example, new String("A String") creates a new String object. Invoking a constructor without using new has consequences that depend on the constructor. For example, String("A String") produces a primitive string, not an object.
+
 >ECMAScript supports prototype-based inheritance. Every constructor has an associated prototype, and every object created by that constructor has an implicit reference to the prototype (called the object's prototype) associated with its constructor. Furthermore, a prototype may have a non-null implicit reference to its prototype, and so on; this is called the prototype chain. When a reference is made to a property in an object, that reference is to the property of that name in the first object in the prototype chain that contains a property of that name. In other words, first the object mentioned directly is examined for such a property; if that object contains the named property, that is the property to which the reference refers; if that object does not contain the named property, the prototype for that object is examined next; and so on.
 
 依据我的理解就是说:  
 JavaScrip可以采用构造器(constructor)生成一个新的对象,每个构造器都拥有一个prototype属性,而每个通过此构造器生成的对象都有一个指向该构造器原型(prototype)的内部私有的链接(__proto__),而这个prototype因为是个对象,它也拥有自己的原型,这么一级一级指导原型为null,这就构成了原型链.
+
+**这里我们涉及到了一个隐匿属性__proto__,那么__proto__和prototype究竟有什么区别嘞?**
+**注:** __proto__ 是一个不应在你代码中出现的非正规的用法，这里仅仅用它来解释JavaScript原型继承的工作原理。
+
+知道了JavaScrip原型链的存在之后,让我们来看下它的实现,下面这段代码展示了原型链是如何工作的.
+```
+function getProperty(obj, prop) {
+    if (obj.hasOwnProperty(prop)) //首先查找自身属性,如果有则直接返回
+        return obj[prop]
+
+    else if (obj.__proto__ !== null)
+        return getProperty(obj.__proto__, prop) //如何不是私有属性,就在原型链上一步步向上查找,直到找到,如果找不到就返回undefind
+
+    else
+        return undefined
+}
+```
+
+So,如果__proto__可以使用的话,我们可以通过下面这种方式实现继承:
+```
+        var person = {
+            city: "Beijing",
+            hate: function(){
+                alert("I really hate the PM2.5 and the foggy wether!");
+            }
+        }
+
+        var lee = {
+            name: "lee",
+            age: "18",
+            __proto__: person
+        }
+
+        console.log(lee);
+        lee.hate();
+```
+这都什么玩意儿,不是要用new吗.事实上,事情不是这么简单滴,为了和主流的类继承扯上那么一点儿关系,JavaScrip引入了'new'关键字,引入了构造函数.所以通常我们看到的是下面这样的:
+```
+        var Person = function(name,age){
+            this.name = name;
+            this.age  = age;
+        };
+        Person.prototype = {
+            city: "Beijing",
+            hate: function(){
+                alert("I really hate the PM2.5 and the foggy wether!");
+            }
+        }
+        var lee = new Person('lee',18);
+        console.log(lee.name);
+        lee.hate();
+```
+我们需要一个像类一样的东西,于是有了构造函数,我们得有一个通过类生成实例的过程,于是又出现了new.这么一来JavaScrip的原型继承似乎就变得不伦不类了.虽然JavaScrip的原型继承来源于'self',但是却追随了类继承的形式.罪过,不过话说回来,也许就是因为这种妥协才让JavaScrip能够流行起来,并成为了现在最流行的原型继承语言,而self,说实话,它独特写法确实挺难让人接受的.
+
 
 ```
         var Foo = function(){
