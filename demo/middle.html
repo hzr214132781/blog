@@ -23,9 +23,9 @@
 		
 		
 		/*通用解決方案 兼容ie*/
-		/* .box {display: table; width: 500px; height: 150px; *position: relative; border: solid 3px #00f;}
+		.box {display: table; width: 500px; height: 150px; *position: relative;}
 		.hack {display: table-cell; vertical-align: middle; *position: absolute; top: 50%;}
-		.article {*position:relative; top: -50%;} */
+		.article {*position:relative; top: -50%;}
 		
 		/*使用table樣式，但是ie6，7不支持*/
 		/* .box{display: table;}
@@ -37,8 +37,8 @@
 		.article{position: relative; height:60px; clear: both;} */
 
 		/* margin ie6,7无效*/
-		.box{position: relative; width: 500px; height: 150px;}
-		.article{position: absolute; width: 70%; height: 60px; top:0; bottom:0; left: 0; right: 0; margin:auto;}
+		/* .box{position: relative; width: 500px; height: 150px;}
+		.article{position: absolute; width: 70%; height: 60px; top:0; bottom:0; left: 0; right: 0; margin:auto;} */
 
 		/* #main{position: relative; width: 300px; height: 600px; border: solid 1px #f00;}
 		#aside{float:left; height: 50%; margin-bottom: -250px; border: solid 1px #0ff;}
@@ -86,6 +86,7 @@
 
 		<h2>no-hack</h2>
     	<div class="box">
+    		<!-- <div class="midfix"></div> -->
     		<div class="article">
     			<img src="//cakeas.com/source/middle.png" alt="" height="60px">
     		</div>
