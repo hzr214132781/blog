@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Demo | Yesol</title>
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<link href="" rel="stylesheet">
+	<style>
+		.box {margin: 10px; background: #CCC;}
+		.article {background-color: #EEE;}
+		
+		/* <!-- 單行垂直居中--> */
+		/* .article{font-size: 12px; height: 4em; line-height: 4em; overflow: hidden; background-color: #eee;} */
+
+		/* 多行内容居中，且容器高度可变 */
+		/* .article{padding: 20px 5px; background-color: #EEE;} */
+
+		/*容器固定高度*/
+		/* .box{position: relative; width: 500px; height: 300px; }
+		.article{position: absolute; height:60px; top: 50%; margin-top: -30px;} */
+		
+		
+		/*通用解決方案 兼容ie*/
+		/* .box {display: table; width: 500px; height: 150px; *position: relative; border: solid 3px #00f;}
+		.hack {display: table-cell; vertical-align: middle; *position: absolute; top: 50%;}
+		.article {*position:relative; top: -50%;} */
+		
+		/*使用table樣式，但是ie6，7不支持*/
+		/* .box{display: table;}
+		.article{width: 200px; height:200px; display: table-cell; vertical-align: middle;} */
+
+		/* <!-- -Margin --> */
+		/* .box{position: relative; width: 500px; height: 150px;}
+		.midfix {float: left; height: 50%; margin-bottom: -30px;}
+		.article{position: relative; height:60px; clear: both;} */
+
+		/* margin ie6,7无效*/
+		.box{position: relative; width: 500px; height: 150px;}
+		.article{position: absolute; width: 70%; height: 60px; top:0; bottom:0; left: 0; right: 0; margin:auto;}
+
+		/* #main{position: relative; width: 300px; height: 600px; border: solid 1px #f00;}
+		#aside{float:left; height: 50%; margin-bottom: -250px; border: solid 1px #0ff;}
+		#article{clear: both; width: 200px; height: 500px; position: relative; } */
+	</style>
+</head>
+<body>
+    
+    <!-- Page -->
+    <div id="hd"></div>
+    <div id="bd">
+		
+		<!-- 單行垂直居中-->
+    	<div class="box">
+    		<div class="article">
+    			單行垂直居中單行垂直居中單行垂直居中<br/>的用户后
+    		</div>
+    	</div>
+
+		<!--多行内容居中，且容器高度可变-->
+		<div class="box">
+    		<div class="article">
+    			多行内容居中，且容器高度可变<br/>多行内容居中，且容器高度可变
+    		</div>
+    	</div>
+		
+		<!-- /*通用解決方案 兼容ie*/ -->
+		<h2>hack</h2>
+		<div class="box">
+			<div class="hack">
+	    		<div class="article">
+	    			多行内容居中，且容器高度可变<br/>多行内容居中，且容器高度可变
+	    		</div>
+	    	</div>
+    	</div>
+
+		<h2>hack</h2>
+    	<div class="box">
+			<div class="hack">
+	    		<div class="article">
+	    			<img src="//cakeas.com/source/middle.png" alt="" height="60px">
+	    		</div>
+	    	</div>
+    	</div>
+
+		<h2>no-hack</h2>
+    	<div class="box">
+    		<div class="article">
+    			<img src="//cakeas.com/source/middle.png" alt="" height="60px">
+    		</div>
+    	</div>
+		
+		<!-- margin -->
+    	<div class="box">
+    		<div class="midfix"></div>
+    		<div class="article">
+    			多行内容居中，且容器高度可变<br/>多行内容居中，且容器高度可变
+    		</div>
+    	</div>
+
+    	<div class="box">
+    		<div class="article">
+    			多行内容居中，且容器高度可变<br/>多行内容居中，且容器高度可变
+    		</div>
+    	</div>
+
+    	<!-- <div id="main">
+    		<div id="aside"></div>
+    		<div id="article">
+    			注册成为“去哪儿”的用户后，您可注册成为“去哪儿”的用户后，您可
+    			注册成为“去哪儿”的用户后，您可注册成为“去哪儿”的用户后，您可
+    		</div>
+    	</div> -->
+
+
+    </div>
+    <div id="ft"></div>
+	<!-- /Page -->
+
+	<!-- Script -->
+    <script type="text/javascript" src="//cakeas.com/js/lib/jquery-1.10.2.js"></script>
+	<script type="text/javascript"></script>
+	<!-- /Script -->
+</body>
+</html>
