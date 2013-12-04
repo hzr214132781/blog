@@ -6,7 +6,7 @@
         "Dev": "posts/dev",
         "About Me": "posts/about"
     },
-    "template"    : "pithiness",   
+    "template"    : "slate",   
     "perpage"   : 10,
     "order"  : "number",
     "types"     : {
