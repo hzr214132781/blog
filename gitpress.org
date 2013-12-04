@@ -1,7 +1,5 @@
 {
-    "docs"      : ["posts"],
-    "template"    : "default",
-    "domain_alias" :  ["jspie.me"],    
+    "template"    : "default", 
     "perpage"   : 10,
     "order"  : "number",
     "types"     : {
