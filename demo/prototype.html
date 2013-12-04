@@ -123,7 +123,7 @@
 		var person = {
 		    city: "Beijing",
 		    hate: function(){
-		    	alert("I really hate the PM2.5 and the foggy wether!");
+		    	//alert("I really hate the PM2.5 and the foggy wether!");
 		    }
 		}
 
@@ -143,14 +143,48 @@
 		Person.prototype = {
 			city: "Beijing",
 			hate: function(){
-				alert("I really hate the PM2.5 and the foggy wether!");
+				//alert("I really hate the PM2.5 and the foggy wether!");
 			}
 		}
 		var lee = new Person('lee',18);
 		console.log(lee.name);
 		lee.hate();
 
-		
+		//why object no prototype
+		function Humman(name){
+			this.name = name;
+		}
+
+		var newYorker = {
+			city: "NY",
+			speak: "english"
+		}
+		newYorker.__proto__ = Humman.prototype;
+		console.log("why object no prototype");
+		console.log(Humman.prototype.__proto__);
+		console.log(newYorker.__proto__.constructor);
+		for(var i in newYorker){
+			if(newYorker.hasOwnProperty(i)){
+				console.log(newYorker[i]);
+			}
+		}
+
+		function caculate (k) {
+			add(k,1);
+		}
+
+		function add (k,i) {
+			console.log(i);
+			i = i+k;
+			if(i == 9){
+				console.log('end');
+			} else {
+				add(k,i);
+			}
+		}
+
+		caculate(2);
+
 	</script>
 	<!-- /Script -->
 </body>
