@@ -6,7 +6,7 @@
         "Dev": "posts/dev",
         "About Me": "posts/about"
     },
-    "template"    : "slate",   
+    "template"    : "tactile",  // default、slate、tactile、phase、pithiness、greyshade 
     "perpage"   : 10,
     "order"  : "number",
     "types"     : {
