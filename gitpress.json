@@ -1,3 +1,33 @@
 {
-    "docs"      : ["README.md", "docs"],        
+    "docs"      : {
+        "JS": "posts/js",
+        "Ghisy": "posts/ghisy",
+        "Life": "posts/life",
+        "Dev": "posts/dev",
+        "About Me": "posts/about"
+    },
+    "template"    : "pithiness",   
+    "perpage"   : 10,
+    "order"  : "number",
+    "types"     : {
+        "\\.(md||markdown)$"   : "markdown", 
+        "\\.(js||css||json)$"  : "code",
+        "\\.html?$"            : "html",
+        ".*"                   : "text"        
+    },
+    "title"  : "JS-Pie|前端派",
+    "description" : "Record web develop life",
+    "comment"  : {"type":"duoshuo", "short_name":"gitpress"},
+    "friends"  : [
+        {
+          "name"  : "github",
+          "title"  : "github",
+          "url"  : "http://github.com"          
+        },
+        {
+          "name"  : "gitpress",
+          "title"  : "gitpress",
+          "url"  : "http://gitpress.org"
+        }
+    ] 
 }
